@@ -7,7 +7,6 @@ services:
     image: php:7.4-fpm
     container_name: php
     restart: on-failure
-
     volumes:
       - './source_files:/var/www/html' 
 
