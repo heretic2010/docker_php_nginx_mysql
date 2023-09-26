@@ -1,0 +1,9 @@
+CREATE DATABASE {{ DATABASE }};
+CREATE USER '{{ USER }}'@'%' IDENTIFIED WITH mysql_native_password BY '{{ mysql_native_password }}';
+GRANT ALL ON {{ DATABASE }}.* TO '{{ USER }}'@'%';
+CREATE TABLE {{ DATABASE }}.{{ TABLE }} (
+	item_id INT AUTO_INCREMENT,
+	content VARCHAR(255),
+	PRIMARY KEY(item_id)
+);
+INSERT INTO {{ DATABASE }}.{{ TABLE }} (content) VALUES ("My first important item");

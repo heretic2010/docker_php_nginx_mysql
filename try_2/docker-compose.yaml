@@ -1,0 +1,43 @@
+version: '3'
+services:
+  php:
+    build: 
+      context: .
+      dockerfile: Dockerfile_php
+    image: php:7.4-fpm
+    container_name: php
+    restart: on-failure
+
+    volumes:
+      - './source_files:/var/www/html' 
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    image: nginx 
+    container_name: webserver
+    restart: on-failure
+    ports:
+      - 80:80
+    volumes:
+      - './source_files:/var/www/html'
+      - ./source_files:/etc/nginx/conf.d/
+    depends_on:
+      - php
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile_mysql
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=toor
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_ALLOW_EMPTY_PASSWORD=no
+      - MYSQL_RANDOM_ROOT_PASSWORD=no
+    image: mysql:latest
+    volumes:
+         - './source_files/entrypoin_db:/docker-entrypoint-initdb.d/'
+    ports:
+      - "3306:3306"

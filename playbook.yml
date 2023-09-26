@@ -1,0 +1,4 @@
+- hosts: slaves
+  become: true
+  roles:
+    - docker-role

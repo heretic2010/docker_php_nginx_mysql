@@ -1,0 +1,6 @@
+[MASTER]
+bubuntu20_master ansible_host=192.168.0.4 ansible_user=root ansible_ssh_pribate_key_file='/root/.ssh/id_rsa'
+
+[slaves]
+bubuntu20_slave ansible_host=192.168.0.9 ansible_user=root ansible_ssh_pribate_key_file='/root/.ssh/id_rsa'
+bubuntu20_slave2 ansible_host=192.168.0.5 ansible_user=root ansible_ssh_pribate_key_file='/root/.ssh/id_rsa'

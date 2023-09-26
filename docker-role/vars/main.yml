@@ -1,0 +1,16 @@
+---
+# vars file for docker-role
+container_count: 1
+default_container_name: docker
+default_container_image: ubuntu
+default_container_command: sleep 1d
+
+DATABASE: example_database
+USER: example_user
+mysql_native_password: password
+TABLE: todo_list
+docker_compose_name: docker
+
+owner: root
+group: root
+user: root

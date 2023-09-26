@@ -1,0 +1,92 @@
+---
+# tasks file for docker-role
+
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Pull default Docker image
+  community.docker.docker_image:
+    name: "{{ default_container_image }}"
+    source: pull
+
+- name: Create default containers
+  community.docker.docker_container:
+    name: "{{ default_container_name }}{{ item }}"
+    image: "{{ default_container_image }}"
+    command: "{{ default_container_command }}"
+    state: present
+  with_sequence: count={{ container_count }}
+
+- name: Install docker-compose
+  get_url:
+    url : https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '755'
+
+- name: Install Docker-compose Module for Python
+  pip:
+    name: docker-compose
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: ./try_2
+    dest: ~/
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: template helper_init.sql.j2
+  template:
+    src: helper_init.sql.j2
+    dest: ~/try_2/source_files/entrypoin_db/helper_init.sql
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: template todo_list.php.j2
+  template:
+    src: todo_list.php.j2
+    dest: ~/try_2/source_files/todo_list.php
+    owner: root
+    group: root
+    mode: '0777'
+
+- name: Make sure compose service is up
+  docker_compose:
+    project_src: ~/try_2
+    files:
+      # - "{{ name }}_compose.yml"
+      - "{{ docker_compose_name }}-compose.yaml"
+    state: present
+
+

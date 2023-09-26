@@ -1,0 +1,7 @@
+[all]
+
+[slaves]
+
+docker_host1 ansible_host=192.168.0.5 ansible_port=22
+
+docker_host ansible_host=192.168.0.9 ansible_port=22
